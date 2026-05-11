@@ -1,10 +1,22 @@
 {
     "version": "2.0.0",
+    "windows": {
+        "options": {
+            "shell": {
+                "executable": "cmd.exe",
+                "args": [
+                    "/C",
+                    "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\"",
+                    "&&"
+                ]
+            }
+        }
+    },
     "tasks": [
         {
             "label": "CMake Configure",
             "type": "shell",
-            "command": "${config:cmake.cmakePath}",
+            "command": "cmake",
             "args": [
                 "-B", "build",
                 "-S", ".",
@@ -18,7 +30,7 @@
         {
             "label": "CMake Configure Release",
             "type": "shell",
-            "command": "${config:cmake.cmakePath}",
+            "command": "cmake",
             "args": [
                 "-B", "build",
                 "-S", ".",
@@ -32,7 +44,7 @@
         {
             "label": "CMake Build",
             "type": "shell",
-            "command": "${config:cmake.cmakePath}",
+            "command": "cmake",
             "args": [
                 "--build", "build",
                 "--parallel"
@@ -48,7 +60,7 @@
         {
             "label": "CMake Build Release",
             "type": "shell",
-            "command": "${config:cmake.cmakePath}",
+            "command": "cmake",
             "args": [
                 "--build", "build",
                 "--parallel"
@@ -61,7 +73,7 @@
         {
             "label": "CMake Clean",
             "type": "shell",
-            "command": "${config:cmake.cmakePath}",
+            "command": "cmake",
             "args": [
                 "--build", "build",
                 "--target", "clean"
@@ -73,7 +85,7 @@
         {
             "label": "CMake Clean Rebuild",
             "type": "shell",
-            "command": "${config:cmake.cmakePath}",
+            "command": "cmake",
             "args": [
                 "--build", "build",
                 "--clean-first"
