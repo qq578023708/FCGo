@@ -76,14 +76,35 @@ cmake --build build
 
 ## 按键说明
 
+### 玩家 1 (P1)
+
 | 按键 | 功能 |
 |------|------|
-| 方向键 | D-Pad |
-| Z | B 键 |
-| X | A 键 |
+| W/A/S/D | 方向键 (D-Pad) |
+| J | B 键 |
+| K | A 键 |
+| U | B 连发键 (Turbo B) |
+| I | A 连发键 (Turbo A) |
 | Enter | Start |
 | Shift | Select |
-| R | Reset |
+
+### 玩家 2 (P2)
+
+| 按键 | 功能 |
+|------|------|
+| 方向键 | 方向键 (D-Pad) |
+| 0 (数字零) | B 键 |
+| . (句号) | A 键 |
+| 1 | B 连发键 (Turbo B) |
+| 2 | A 连发键 (Turbo A) |
+| + | Start |
+| - | Select |
+
+### 系统按键
+
+| 按键 | 功能 |
+|------|------|
+| R | 重置 (Reset) |
 | F1 | 切换到 SDL2 渲染器 |
 | F2 | 切换到 OpenGL 渲染器 |
 
