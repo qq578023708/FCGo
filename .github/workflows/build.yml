@@ -8,37 +8,42 @@ on:
 
 jobs:
   build-windows:
-    runs-on: windows-2022
+    runs-on: windows-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Setup Qt
-      uses: jurplel/install-qt-action@v4
+    - name: Setup MSYS2
+      uses: msys2/setup-msys2@v2
       with:
-        version: '6.8.0'
-        host: 'windows'
-        target: 'desktop'
-        arch: 'win64_msvc2022_64'
-
-    - name: Setup MSVC
-      uses: ilammy/msvc-dev-cmd@v1
+        msystem: MINGW64
+        update: true
+        install: >-
+          mingw-w64-x86_64-gcc
+          mingw-w64-x86_64-cmake
+          mingw-w64-x86_64-ninja
+          mingw-w64-x86_64-qt6-base
+          mingw-w64-x86_64-qt6-tools
+          mingw-w64-x86_64-SDL2
 
     - name: Configure CMake
+      shell: msys2 {0}
       run: |
-        cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
+        cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++
 
     - name: Build Release
+      shell: msys2 {0}
       run: |
-        cmake --build build --config Release --parallel
+        cmake --build build --parallel
 
     - name: Package Artifacts
+      shell: msys2 {0}
       run: |
-        mkdir artifact
-        copy build\Release\FCGo.exe artifact\
-        copy build\Release\*.dll artifact\ 2>nul || echo "No DLLs found"
-        copy steam_appid.txt artifact\ 2>nul || echo "steam_appid.txt not found"
+        mkdir -p artifact
+        cp build/FCGo.exe artifact/
+        # Copy required DLLs
+        ldd build/FCGo.exe | grep mingw | awk '{print $3}' | xargs -I{} cp {} artifact/ 2>/dev/null || true
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
@@ -57,15 +62,15 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake g++ libsdl2-dev qt6-base-dev qt6-tools-dev
+        sudo apt-get install -y cmake g++ ninja-build libsdl2-dev qt6-base-dev qt6-tools-dev
 
     - name: Configure CMake
       run: |
-        cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
+        cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Release
 
     - name: Build
       run: |
-        cmake --build build --config Release --parallel
+        cmake --build build --parallel
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
