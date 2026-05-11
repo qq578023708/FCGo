@@ -3,8 +3,8 @@ build/
 Build/
 out/
 Out/
-Release/
-Debug/
+/Release/
+/Debug/
 RelWithDebInfo/
 MinSizeRel/
 
