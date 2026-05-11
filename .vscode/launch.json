@@ -2,22 +2,42 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug FCGo",
+            "name": "Debug FCGo (MSVC)",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/FCGo.exe",
+            "program": "${workspaceFolder}/build-msvc/FCGo.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
             "console": "integratedTerminal",
-            "preLaunchTask": "CMake Build"
+            "preLaunchTask": "CMake Build (MSVC)"
         },
         {
-            "name": "Debug FCGo (with ROM)",
-            "type": "cppvsdbg",
+            "name": "Debug FCGo (MinGW)",
+            "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/FCGo.exe",
+            "program": "${workspaceFolder}/build-mingw/FCGo.exe",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "console": "integratedTerminal",
+            "preLaunchTask": "CMake Build (MinGW)",
+            "miDebuggerPath": "C:\\msys64\\mingw64\\bin\\gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "Debug FCGo (MinGW, with ROM)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build-mingw/FCGo.exe",
             "args": [
                 "${input:romPath}"
             ],
@@ -25,19 +45,35 @@
             "cwd": "${workspaceFolder}",
             "environment": [],
             "console": "integratedTerminal",
-            "preLaunchTask": "CMake Build"
+            "preLaunchTask": "CMake Build (MinGW)",
+            "miDebuggerPath": "C:\\msys64\\mingw64\\bin\\gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
         },
         {
-            "name": "Debug FCGo (Release)",
-            "type": "cppvsdbg",
+            "name": "Debug FCGo (Release MinGW)",
+            "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/FCGo.exe",
+            "program": "${workspaceFolder}/build-mingw/FCGo.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
             "console": "integratedTerminal",
-            "preLaunchTask": "CMake Build Release"
+            "preLaunchTask": "CMake Build Release (MinGW)",
+            "miDebuggerPath": "C:\\msys64\\mingw64\\bin\\gdb.exe",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
         },
         {
             "name": "Attach to FCGo",

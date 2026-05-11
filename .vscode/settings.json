@@ -1,12 +1,14 @@
 {
     "cmake.cmakePath": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin\\cmake.exe",
     "cmake.configureOnOpen": false,
-    "cmake.buildDirectory": "${workspaceFolder}/build",
+    "cmake.buildDirectory": "${workspaceFolder}/build-msvc",
     "cmake.generator": "Ninja",
     "cmake.preferredGenerators": [
         "Ninja",
         "Visual Studio 17 2022"
     ],
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
-    "C_Cpp.intelliSenseCachePath": "${workspaceFolder}/.vscode/intelliSenseCache"
+    "C_Cpp.intelliSenseCachePath": "${workspaceFolder}/.vscode/intelliSenseCache",
+    "C_Cpp.default.cStandard": "c17",
+    "C_Cpp.default.cppStandard": "c++17"
 }

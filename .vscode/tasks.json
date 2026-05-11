@@ -1,52 +1,59 @@
 {
     "version": "2.0.0",
-    "windows": {
-        "options": {
-            "shell": {
-                "executable": "cmd.exe",
-                "args": [
-                    "/C",
-                    "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\"",
-                    "&&"
-                ]
-            }
-        }
-    },
     "tasks": [
         {
-            "label": "CMake Configure",
+            "label": "CMake Configure (MSVC)",
             "type": "shell",
             "command": "cmake",
+            "options": {
+                "env": {
+                    "PATH": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin;${env:PATH}"
+                }
+            },
+            "windows": {
+                "options": {
+                    "shell": {
+                        "executable": "cmd.exe",
+                        "args": ["/C", "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\"", "&&"]
+                    }
+                }
+            },
             "args": [
-                "-B", "build",
+                "-B", "build-msvc",
                 "-S", ".",
                 "-G", "Ninja",
                 "-DCMAKE_BUILD_TYPE=Debug"
             ],
             "group": "build",
             "problemMatcher": [],
-            "detail": "Configure CMake project with Ninja"
+            "detail": "Configure with MSVC + Ninja"
         },
         {
-            "label": "CMake Configure Release",
+            "label": "CMake Configure (MinGW)",
             "type": "shell",
-            "command": "cmake",
+            "command": "C:\\msys64\\usr\\bin\\bash.exe",
             "args": [
-                "-B", "build",
-                "-S", ".",
-                "-G", "Ninja",
-                "-DCMAKE_BUILD_TYPE=Release"
+                "-lc",
+                "cmake -B build-mingw -S . -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++"
             ],
             "group": "build",
             "problemMatcher": [],
-            "detail": "Configure CMake project for Release with Ninja"
+            "detail": "Configure with MinGW GCC + Ninja"
         },
         {
-            "label": "CMake Build",
+            "label": "CMake Build (MSVC)",
             "type": "shell",
             "command": "cmake",
+            "windows": {
+                "options": {
+                    "shell": {
+                        "executable": "cmd.exe",
+                        "args": ["/C", "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\"", "&&"]
+                    }
+                }
+            },
             "args": [
-                "--build", "build",
+                "--build", "build-msvc",
                 "--parallel"
             ],
             "group": {
@@ -54,45 +61,65 @@
                 "isDefault": true
             },
             "problemMatcher": ["$msCompile"],
-            "detail": "Build the project",
-            "dependsOn": "CMake Configure"
+            "detail": "Build with MSVC",
+            "dependsOn": "CMake Configure (MSVC)"
         },
         {
-            "label": "CMake Build Release",
+            "label": "CMake Build (MinGW)",
             "type": "shell",
-            "command": "cmake",
+            "command": "C:\\msys64\\usr\\bin\\bash.exe",
             "args": [
-                "--build", "build",
-                "--parallel"
+                "-lc",
+                "cmake --build build-mingw --parallel"
             ],
             "group": "build",
-            "problemMatcher": ["$msCompile"],
-            "detail": "Build the project in Release mode",
-            "dependsOn": "CMake Configure Release"
+            "problemMatcher": ["$gcc"],
+            "detail": "Build with MinGW GCC",
+            "dependsOn": "CMake Configure (MinGW)"
         },
         {
-            "label": "CMake Clean",
+            "label": "CMake Build Release (MinGW)",
+            "type": "shell",
+            "command": "C:\\msys64\\usr\\bin\\bash.exe",
+            "args": [
+                "-lc",
+                "cmake -B build-mingw -S . -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ && cmake --build build-mingw --parallel"
+            ],
+            "group": "build",
+            "problemMatcher": ["$gcc"],
+            "detail": "Configure and build Release with MinGW GCC"
+        },
+        {
+            "label": "CMake Clean (MSVC)",
             "type": "shell",
             "command": "cmake",
+            "windows": {
+                "options": {
+                    "shell": {
+                        "executable": "cmd.exe",
+                        "args": ["/C", "\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\"", "&&"]
+                    }
+                }
+            },
             "args": [
-                "--build", "build",
+                "--build", "build-msvc",
                 "--target", "clean"
             ],
             "group": "build",
             "problemMatcher": [],
-            "detail": "Clean build artifacts"
+            "detail": "Clean MSVC build"
         },
         {
-            "label": "CMake Clean Rebuild",
+            "label": "CMake Clean (MinGW)",
             "type": "shell",
-            "command": "cmake",
+            "command": "C:\\msys64\\usr\\bin\\bash.exe",
             "args": [
-                "--build", "build",
-                "--clean-first"
+                "-lc",
+                "cmake --build build-mingw --target clean"
             ],
             "group": "build",
-            "problemMatcher": ["$msCompile"],
-            "detail": "Clean and rebuild the project"
+            "problemMatcher": [],
+            "detail": "Clean MinGW build"
         }
     ]
 }
