@@ -249,7 +249,7 @@ if(Qt6LinguistTools_FOUND)
         src/qt/translations/fcgo_zh_CN.ts
     )
     
-    # Generate .qm files in the build directory (not source directory)
+    # Generate .qm files in the build directory
     set(QM_OUTPUT_DIR "${CMAKE_BINARY_DIR}/translations")
     file(MAKE_DIRECTORY ${QM_OUTPUT_DIR})
     set(QM_FILES_OUT)
@@ -267,15 +267,27 @@ if(Qt6LinguistTools_FOUND)
         )
     endforeach()
     
-    # Create a target for translations
-    add_custom_target(translations ALL DEPENDS ${QM_FILES_OUT})
-    add_dependencies(FCGo translations)
+    # Create a custom .qrc file for translations
+    set(QRC_FILE "${CMAKE_BINARY_DIR}/translations.qrc")
+    file(WRITE ${QRC_FILE} "<RCC>\n  <qresource prefix=\"/\">\n")
+    foreach(qm_file ${QM_FILES_OUT})
+        get_filename_component(qm_name ${qm_file} NAME)
+        file(APPEND ${QRC_FILE} "    <file>${qm_name}</file>\n")
+    endforeach()
+    file(APPEND ${QRC_FILE} "  </qresource>\n</RCC>\n")
     
-    # Add .qm files directly as resources from build directory
-    qt_add_resources(FCGo "translations"
-        PREFIX "/"
-        BASE "${QM_OUTPUT_DIR}"
-        FILES ${QM_FILES_OUT}
+    # Create a custom command to regenerate .qrc when .qm files change
+    add_custom_command(
+        OUTPUT ${QRC_FILE}
+        COMMAND ${CMAKE_COMMAND} -E echo "Updating translations.qrc"
+        DEPENDS ${QM_FILES_OUT}
+    )
+    
+    # Add the .qrc file to the target with explicit dependency
+    set_property(SOURCE ${QRC_FILE} PROPERTY GENERATED TRUE)
+    target_sources(FCGo PRIVATE ${QRC_FILE})
+    set_source_files_properties(${QRC_FILE} PROPERTIES
+        OBJECT_DEPENDS "${QM_FILES_OUT}"
     )
 endif()
 
