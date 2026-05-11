@@ -250,23 +250,31 @@ target_link_libraries(FCGo PRIVATE
 
 # Copy SDL2.dll to output directory
 if(WIN32)
-    add_custom_command(TARGET FCGo POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        "${CMAKE_CURRENT_SOURCE_DIR}/third_party/SDL2/lib/x64/SDL2.dll"
-        $<TARGET_FILE_DIR:FCGo>
-    )
+    # Copy SDL2.dll only if using bundled SDL2
+    if(NOT SDL2_FOUND)
+        add_custom_command(TARGET FCGo POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${CMAKE_CURRENT_SOURCE_DIR}/third_party/SDL2/lib/x64/SDL2.dll"
+            $<TARGET_FILE_DIR:FCGo>
+            COMMENT "Copying SDL2.dll"
+        )
+    endif()
     # Copy Steam API DLLs
     if(STEAMWORKS_FOUND)
         add_custom_command(TARGET FCGo POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_if_different
             "${STEAMWORKS_LIBRARY_DIR}/steam_api64.dll"
             $<TARGET_FILE_DIR:FCGo>
+            COMMENT "Copying steam_api64.dll"
         )
-        add_custom_command(TARGET FCGo POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${CMAKE_CURRENT_SOURCE_DIR}/third_party/steamworks/sdk/redistributable_bin/steam_api.dll"
-            $<TARGET_FILE_DIR:FCGo>
-        )
+        if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/steamworks/sdk/redistributable_bin/steam_api.dll")
+            add_custom_command(TARGET FCGo POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                "${CMAKE_CURRENT_SOURCE_DIR}/third_party/steamworks/sdk/redistributable_bin/steam_api.dll"
+                $<TARGET_FILE_DIR:FCGo>
+                COMMENT "Copying steam_api.dll"
+            )
+        endif()
     endif()
 endif()
 
