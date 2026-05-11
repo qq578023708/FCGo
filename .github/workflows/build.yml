@@ -3,6 +3,8 @@ name: Build
 on:
   push:
     branches: [ main, master ]
+    tags:
+      - 'v*'
   pull_request:
     branches: [ main, master ]
 
@@ -51,3 +53,22 @@ jobs:
         name: FCGo-Windows-x64
         path: artifact/
         retention-days: 30
+
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v2
+      with:
+        name: FCGo ${{ github.ref_name }}
+        body: |
+          ## FCGo ${{ github.ref_name }}
+
+          ### Downloads
+          - `FCGo-Windows-x64.zip` - Windows 64-bit portable build
+
+          ### Changes
+          See the full commit history for details.
+        draft: false
+        prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc') }}
+        files: artifact/*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
