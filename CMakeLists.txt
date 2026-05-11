@@ -144,8 +144,15 @@ target_sources(FCGo PRIVATE ${NETWORK_SOURCES} ${NETWORK_HEADERS})
 if(STEAMWORKS_FOUND)
     target_compile_definitions(FCGo PRIVATE STEAMWORKS_AVAILABLE)
     target_include_directories(FCGo PRIVATE ${STEAMWORKS_INCLUDE_DIR})
-    target_link_directories(FCGo PRIVATE ${STEAMWORKS_LIBRARY_DIR})
-    target_link_libraries(FCGo PRIVATE steam_api64)
+    
+    # For MinGW, link directly to the DLL; for MSVC, use the .lib file
+    if(MINGW)
+        # MinGW can link directly to DLL
+        target_link_libraries(FCGo PRIVATE "${STEAMWORKS_LIBRARY_DIR}/steam_api64.dll")
+    else()
+        target_link_directories(FCGo PRIVATE ${STEAMWORKS_LIBRARY_DIR})
+        target_link_libraries(FCGo PRIVATE steam_api64)
+    endif()
 endif()
 
 # ============================================================
