@@ -169,7 +169,7 @@ FCGo/
 
 ## 自动构建
 
-GitHub Actions 自动构建 Windows (MinGW) 和 Linux 版本：
+GitHub Actions 自动构建 Windows (MinGW) 版本：
 
 [![Build](https://github.com/qq578023708/FCGo/actions/workflows/build.yml/badge.svg)](https://github.com/qq578023708/FCGo/actions)
 

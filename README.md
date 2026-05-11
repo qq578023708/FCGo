@@ -169,7 +169,7 @@ FCGo/
 
 ## Automated Builds
 
-GitHub Actions automatically builds Windows (MinGW) and Linux versions:
+GitHub Actions automatically builds Windows (MinGW) version:
 
 [![Build](https://github.com/qq578023708/FCGo/actions/workflows/build.yml/badge.svg)](https://github.com/qq578023708/FCGo/actions)
 

@@ -51,30 +51,3 @@ jobs:
         name: FCGo-Windows-x64
         path: artifact/
         retention-days: 30
-
-  build-linux:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y cmake g++ ninja-build libsdl2-dev qt6-base-dev qt6-tools-dev
-
-    - name: Configure CMake
-      run: |
-        cmake -B build -S . -G Ninja -DCMAKE_BUILD_TYPE=Release
-
-    - name: Build
-      run: |
-        cmake --build build --parallel
-
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: FCGo-Linux-x64
-        path: build/FCGo
-        retention-days: 30
