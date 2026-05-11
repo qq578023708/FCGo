@@ -519,7 +519,16 @@ uint64_t SteamManager::getPlayerSteamId() const { return 0; }
 int SteamManager::getLobbyMemberCount() const { return 0; }
 std::vector<NetPlayer> SteamManager::getLobbyMembers() const { return {}; }
 void SteamManager::sendNetData(const uint8_t*, size_t, bool) {}
+void SteamManager::sendNetMessage(const QByteArray&) {}
+void SteamManager::sendFrameInput(uint32_t, uint8_t, uint8_t) {}
+void SteamManager::sendClientInput(uint8_t, uint8_t) {}
+void SteamManager::sendStateSnapshot(const std::vector<uint8_t>&) {}
+void SteamManager::sendPing() {}
+void SteamManager::handlePing(const uint8_t*, size_t, uint64_t) {}
+void SteamManager::handlePong(const uint8_t*, size_t) {}
 bool SteamManager::receiveNetData(uint8_t*, size_t*, uint64_t*) { return false; }
 void SteamManager::runCallbacks() {}
+bool SteamManager::isHost() const { return false; }
+void SteamManager::kickPlayer(uint64_t) {}
 
 #endif
