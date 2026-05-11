@@ -1,0 +1,9 @@
+<RCC>
+  <qresource prefix="/">
+    <file alias="resources/icons/pause.png">E:/VSProjects/FCGo/resources/icons/pause.png</file>
+    <file alias="resources/icons/step.png">E:/VSProjects/FCGo/resources/icons/step.png</file>
+    <file alias="resources/icons/step_over.png">E:/VSProjects/FCGo/resources/icons/step_over.png</file>
+    <file alias="resources/icons/step_frame.png">E:/VSProjects/FCGo/resources/icons/step_frame.png</file>
+  </qresource>
+</RCC>
+
