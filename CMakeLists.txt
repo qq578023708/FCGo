@@ -243,51 +243,25 @@ if(WIN32)
     endif()
 endif()
 
-# Translations processing (after target is created)
+# Translations processing using Qt6 recommended approach
 if(Qt6LinguistTools_FOUND)
     set(TS_FILES
         src/qt/translations/fcgo_zh_CN.ts
     )
     
-    # Generate .qm files in the build directory
-    set(QM_OUTPUT_DIR "${CMAKE_BINARY_DIR}/translations")
-    set(QM_FILES_OUT)
-    
-    foreach(ts_file ${TS_FILES})
-        get_filename_component(ts_name ${ts_file} NAME_WE)
-        set(qm_file "${QM_OUTPUT_DIR}/${ts_name}.qm")
-        list(APPEND QM_FILES_OUT ${qm_file})
-        
-        add_custom_command(
-            OUTPUT ${qm_file}
-            COMMAND ${CMAKE_COMMAND} -E make_directory ${QM_OUTPUT_DIR}
-            COMMAND ${Qt6_LRELEASE_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/${ts_file} -qm ${qm_file}
-            DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${ts_file}
-            COMMENT "Generating ${qm_file}"
-        )
-    endforeach()
-    
-    # Create .qrc file at configure time
-    set(QRC_FILE "${CMAKE_BINARY_DIR}/translations.qrc")
-    file(WRITE ${QRC_FILE} "<RCC>\n  <qresource prefix=\"/\">\n")
-    foreach(qm_file ${QM_FILES_OUT})
-        get_filename_component(qm_name ${qm_file} NAME)
-        file(APPEND ${QRC_FILE} "    <file>translations/${qm_name}</file>\n")
-    endforeach()
-    file(APPEND ${QRC_FILE} "  </qresource>\n</RCC>\n")
-    
-    # Create a custom target for translations
-    add_custom_target(translations_qm ALL DEPENDS ${QM_FILES_OUT})
-    
-    # Add .qm files as resources using qt_add_resources
-    qt_add_resources(FCGo "translations"
-        PREFIX "/"
-        BASE "${CMAKE_BINARY_DIR}"
-        FILES ${QM_FILES_OUT}
+    # Use qt_add_lrelease to generate .qm files at build time
+    qt_add_lrelease(FCGo
+        TS_FILES ${TS_FILES}
+        QM_FILES_OUTPUT_VARIABLE QM_FILES
     )
     
-    # Ensure translations are built before FCGo
-    add_dependencies(FCGo translations_qm)
+    # Add the generated .qm files as resources
+    # Note: qt_add_resources will handle the dependency automatically
+    qt_add_resources(FCGo "translations"
+        PREFIX "/"
+        BASE "${CMAKE_CURRENT_BINARY_DIR}"
+        FILES ${QM_FILES}
+    )
 endif()
 
 # Add icon resources
