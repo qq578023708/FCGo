@@ -1,13 +1,16 @@
 # Build directories
 build/
-Build/
+/build-msvc/
+/FCGo.dir/
+/Build/
+/x64/
 out/
 Out/
 /Release/
 /Debug/
 RelWithDebInfo/
 MinSizeRel/
-
+third_party/steamworks/sdk/steamworksexample/
 # CMake
 CMakeCache.txt
 CMakeFiles/
