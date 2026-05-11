@@ -267,12 +267,13 @@ if(Qt6LinguistTools_FOUND)
         )
     endforeach()
     
-    # Create a custom .qrc file for translations
+    # Create a custom .qrc file for translations with correct relative paths
     set(QRC_FILE "${CMAKE_BINARY_DIR}/translations.qrc")
     file(WRITE ${QRC_FILE} "<RCC>\n  <qresource prefix=\"/\">\n")
     foreach(qm_file ${QM_FILES_OUT})
         get_filename_component(qm_name ${qm_file} NAME)
-        file(APPEND ${QRC_FILE} "    <file>${qm_name}</file>\n")
+        # Use relative path from build directory
+        file(APPEND ${QRC_FILE} "    <file>translations/${qm_name}</file>\n")
     endforeach()
     file(APPEND ${QRC_FILE} "  </qresource>\n</RCC>\n")
     
