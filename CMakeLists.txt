@@ -276,20 +276,18 @@ if(Qt6LinguistTools_FOUND)
     endforeach()
     file(APPEND ${QRC_FILE} "  </qresource>\n</RCC>\n")
     
-    # Use qt_add_resources but ensure .qm files exist first by creating a custom target
-    # that generates .qm files before the main build
+    # Create a custom target for translations
     add_custom_target(translations_qm ALL DEPENDS ${QM_FILES_OUT})
     
     # Add .qm files as resources using qt_add_resources
-    # The key is to make the resource depend on the translations_qm target
     qt_add_resources(FCGo "translations"
         PREFIX "/"
         BASE "${CMAKE_BINARY_DIR}"
         FILES ${QM_FILES_OUT}
     )
     
-    # Ensure translations are built before the resources are processed
-    add_dependencies(FCGo_autogen translations_qm)
+    # Ensure translations are built before FCGo
+    add_dependencies(FCGo translations_qm)
 endif()
 
 # Add icon resources
