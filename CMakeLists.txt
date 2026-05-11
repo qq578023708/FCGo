@@ -137,7 +137,9 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/third_party/steamworks/sdk/public/steam/s
             message(STATUS "Steamworks SDK library not found - network multiplayer disabled")
         endif()
     else()
-        set(STEAMWORKS_FOUND TRUE)
+        # Steamworks SDK only supports Windows
+        set(STEAMWORKS_FOUND FALSE)
+        message(STATUS "Steamworks SDK not available on this platform - network multiplayer disabled")
     endif()
     if(STEAMWORKS_FOUND)
         message(STATUS "Steamworks SDK found")
