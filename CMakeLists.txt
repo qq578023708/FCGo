@@ -289,3 +289,17 @@ qt_add_resources(FCGo "icons"
         resources/icons/step_over.png
         resources/icons/step_frame.png
 )
+
+# Auto-deploy Qt and runtime DLLs to build directory after build
+if(WIN32)
+    include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/deploy_qt.cmake OPTIONAL)
+    if(TARGET Qt6::Core)
+        add_custom_command(TARGET FCGo POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -DCMAKE_PREFIX_PATH="${CMAKE_PREFIX_PATH}"
+                    -DCMAKE_BUILD_TYPE=$<CONFIGURATION>
+                    -DQT_DEPLOY_TARGET=$<TARGET_FILE:FCGo>
+                    -P ${CMAKE_CURRENT_SOURCE_DIR}/cmake/deploy_qt.cmake
+            COMMENT "Deploying Qt and runtime DLLs..."
+        )
+    endif()
+endif()
