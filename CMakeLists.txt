@@ -251,7 +251,6 @@ if(Qt6LinguistTools_FOUND)
     
     # Generate .qm files in the build directory
     set(QM_OUTPUT_DIR "${CMAKE_BINARY_DIR}/translations")
-    file(MAKE_DIRECTORY ${QM_OUTPUT_DIR})
     set(QM_FILES_OUT)
     
     foreach(ts_file ${TS_FILES})
@@ -261,35 +260,40 @@ if(Qt6LinguistTools_FOUND)
         
         add_custom_command(
             OUTPUT ${qm_file}
+            COMMAND ${CMAKE_COMMAND} -E make_directory ${QM_OUTPUT_DIR}
             COMMAND ${Qt6_LRELEASE_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/${ts_file} -qm ${qm_file}
             DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${ts_file}
             COMMENT "Generating ${qm_file}"
         )
     endforeach()
     
-    # Create a custom .qrc file for translations with correct relative paths
+    # Create .qrc file at configure time
     set(QRC_FILE "${CMAKE_BINARY_DIR}/translations.qrc")
     file(WRITE ${QRC_FILE} "<RCC>\n  <qresource prefix=\"/\">\n")
     foreach(qm_file ${QM_FILES_OUT})
         get_filename_component(qm_name ${qm_file} NAME)
-        # Use relative path from build directory
         file(APPEND ${QRC_FILE} "    <file>translations/${qm_name}</file>\n")
     endforeach()
     file(APPEND ${QRC_FILE} "  </qresource>\n</RCC>\n")
     
-    # Create a custom command to regenerate .qrc when .qm files change
+    # Manually run rcc to generate .cpp from .qrc (avoid AUTORCC timing issues)
+    set(QRC_CPP "${CMAKE_BINARY_DIR}/qrc_translations.cpp")
+    find_program(Qt_RCC_EXECUTABLE NAMES rcc HINTS "${Qt6_DIR}/../../../bin")
+    if(NOT Qt_RCC_EXECUTABLE)
+        set(Qt_RCC_EXECUTABLE "${Qt6Core_DIR}/../../../bin/rcc")
+    endif()
+    
     add_custom_command(
-        OUTPUT ${QRC_FILE}
-        COMMAND ${CMAKE_COMMAND} -E echo "Updating translations.qrc"
-        DEPENDS ${QM_FILES_OUT}
+        OUTPUT ${QRC_CPP}
+        COMMAND ${Qt_RCC_EXECUTABLE} -name translations -o ${QRC_CPP} ${QRC_FILE}
+        DEPENDS ${QM_FILES_OUT} ${QRC_FILE}
+        COMMENT "Running rcc for translations"
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     )
     
-    # Add the .qrc file to the target with explicit dependency
-    set_property(SOURCE ${QRC_FILE} PROPERTY GENERATED TRUE)
-    target_sources(FCGo PRIVATE ${QRC_FILE})
-    set_source_files_properties(${QRC_FILE} PROPERTIES
-        OBJECT_DEPENDS "${QM_FILES_OUT}"
-    )
+    # Add the generated .cpp to the target
+    target_sources(FCGo PRIVATE ${QRC_CPP})
+    set_property(SOURCE ${QRC_CPP} PROPERTY GENERATED TRUE)
 endif()
 
 # Add icon resources
