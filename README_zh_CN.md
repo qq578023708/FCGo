@@ -187,4 +187,4 @@ GitHub Actions 自动构建 Windows (MinGW) 版本：
 
 ## 许可证
 
-MIT License
+GPL License

@@ -187,4 +187,4 @@ Implement the `IRenderer` interface and register it in `RendererFactory::create(
 
 ## License
 
-MIT License
+GPL License
