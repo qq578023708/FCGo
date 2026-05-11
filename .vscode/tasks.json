@@ -8,12 +8,12 @@
             "args": [
                 "-B", "build",
                 "-S", ".",
-                "-G", "Visual Studio 17 2022",
-                "-A", "x64"
+                "-G", "Ninja",
+                "-DCMAKE_BUILD_TYPE=Debug"
             ],
             "group": "build",
             "problemMatcher": [],
-            "detail": "Configure CMake project with Visual Studio 2022"
+            "detail": "Configure CMake project with Ninja"
         },
         {
             "label": "CMake Configure Release",
@@ -22,12 +22,12 @@
             "args": [
                 "-B", "build",
                 "-S", ".",
-                "-G", "Visual Studio 17 2022",
-                "-A", "x64"
+                "-G", "Ninja",
+                "-DCMAKE_BUILD_TYPE=Release"
             ],
             "group": "build",
             "problemMatcher": [],
-            "detail": "Configure CMake project for Release with Visual Studio 2022"
+            "detail": "Configure CMake project for Release with Ninja"
         },
         {
             "label": "CMake Build",
@@ -35,7 +35,6 @@
             "command": "${config:cmake.cmakePath}",
             "args": [
                 "--build", "build",
-                "--config", "Debug",
                 "--parallel"
             ],
             "group": {
@@ -52,7 +51,6 @@
             "command": "${config:cmake.cmakePath}",
             "args": [
                 "--build", "build",
-                "--config", "Release",
                 "--parallel"
             ],
             "group": "build",
@@ -78,8 +76,7 @@
             "command": "${config:cmake.cmakePath}",
             "args": [
                 "--build", "build",
-                "--clean-first",
-                "--config", "Debug"
+                "--clean-first"
             ],
             "group": "build",
             "problemMatcher": ["$msCompile"],

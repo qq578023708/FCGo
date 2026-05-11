@@ -5,7 +5,7 @@
             "name": "Debug FCGo",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Debug/FCGo.exe",
+            "program": "${workspaceFolder}/build/FCGo.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
@@ -17,7 +17,7 @@
             "name": "Debug FCGo (with ROM)",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Debug/FCGo.exe",
+            "program": "${workspaceFolder}/build/FCGo.exe",
             "args": [
                 "${input:romPath}"
             ],
@@ -31,7 +31,7 @@
             "name": "Debug FCGo (Release)",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/Release/FCGo.exe",
+            "program": "${workspaceFolder}/build/FCGo.exe",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
