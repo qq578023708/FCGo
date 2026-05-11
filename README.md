@@ -1,6 +1,6 @@
 # FCGo — NES 模拟器
 
-C++17 模块化 NES/FC 模拟器，支持 SDL2 / OpenGL 双渲染后端热切换。
+C++17 模块化 NES/FC 模拟器，支持 SDL2 / OpenGL 双渲染后端热切换，支持Steam联机。
 
 ## 架构
 
