@@ -46,6 +46,10 @@ jobs:
         cp build/FCGo.exe artifact/
         # Copy required DLLs
         ldd build/FCGo.exe | grep mingw | awk '{print $3}' | xargs -I{} cp {} artifact/ 2>/dev/null || true
+        # Copy steam_appid.txt if exists
+        cp steam_appid.txt artifact/ 2>/dev/null || true
+        # Create zip archive
+        cd artifact && zip -r ../FCGo-Windows-x64.zip .
 
     - name: Create Release
       uses: softprops/action-gh-release@v2
@@ -55,12 +59,12 @@ jobs:
           ## FCGo ${{ github.ref_name }}
 
           ### Downloads
-          - Windows 64-bit portable build
+          - `FCGo-Windows-x64.zip` - Windows 64-bit portable build
 
           ### Changes
           See the full commit history for details.
         draft: false
         prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc') }}
-        files: artifact/*
+        files: FCGo-Windows-x64.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
