@@ -276,24 +276,20 @@ if(Qt6LinguistTools_FOUND)
     endforeach()
     file(APPEND ${QRC_FILE} "  </qresource>\n</RCC>\n")
     
-    # Manually run rcc to generate .cpp from .qrc (avoid AUTORCC timing issues)
-    set(QRC_CPP "${CMAKE_BINARY_DIR}/qrc_translations.cpp")
-    find_program(Qt_RCC_EXECUTABLE NAMES rcc HINTS "${Qt6_DIR}/../../../bin")
-    if(NOT Qt_RCC_EXECUTABLE)
-        set(Qt_RCC_EXECUTABLE "${Qt6Core_DIR}/../../../bin/rcc")
-    endif()
+    # Use qt_add_resources but ensure .qm files exist first by creating a custom target
+    # that generates .qm files before the main build
+    add_custom_target(translations_qm ALL DEPENDS ${QM_FILES_OUT})
     
-    add_custom_command(
-        OUTPUT ${QRC_CPP}
-        COMMAND ${Qt_RCC_EXECUTABLE} -name translations -o ${QRC_CPP} ${QRC_FILE}
-        DEPENDS ${QM_FILES_OUT} ${QRC_FILE}
-        COMMENT "Running rcc for translations"
-        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    # Add .qm files as resources using qt_add_resources
+    # The key is to make the resource depend on the translations_qm target
+    qt_add_resources(FCGo "translations"
+        PREFIX "/"
+        BASE "${CMAKE_BINARY_DIR}"
+        FILES ${QM_FILES_OUT}
     )
     
-    # Add the generated .cpp to the target
-    target_sources(FCGo PRIVATE ${QRC_CPP})
-    set_property(SOURCE ${QRC_CPP} PROPERTY GENERATED TRUE)
+    # Ensure translations are built before the resources are processed
+    add_dependencies(FCGo_autogen translations_qm)
 endif()
 
 # Add icon resources
