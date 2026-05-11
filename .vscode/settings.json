@@ -2,9 +2,8 @@
     "cmake.cmakePath": "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin\\cmake.exe",
     "cmake.configureOnOpen": false,
     "cmake.buildDirectory": "${workspaceFolder}/build",
-    "cmake.generator": "Ninja",
+    "cmake.generator": "Visual Studio 17 2022",
     "cmake.preferredGenerators": [
-        "Ninja",
         "Visual Studio 17 2022"
     ],
     "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
