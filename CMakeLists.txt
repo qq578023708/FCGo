@@ -249,8 +249,9 @@ if(Qt6LinguistTools_FOUND)
         src/qt/translations/fcgo_zh_CN.ts
     )
     
-    # Create a custom command to generate .qm files in the source directory
-    set(QM_OUTPUT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src/qt/translations")
+    # Generate .qm files in the build directory (not source directory)
+    set(QM_OUTPUT_DIR "${CMAKE_BINARY_DIR}/translations")
+    file(MAKE_DIRECTORY ${QM_OUTPUT_DIR})
     set(QM_FILES_OUT)
     
     foreach(ts_file ${TS_FILES})
@@ -270,11 +271,10 @@ if(Qt6LinguistTools_FOUND)
     add_custom_target(translations ALL DEPENDS ${QM_FILES_OUT})
     add_dependencies(FCGo translations)
     
-    # Add .qm files directly as resources (not through .qrc file)
-    # This ensures the binary .qm files are embedded, not the .qrc XML
+    # Add .qm files directly as resources from build directory
     qt_add_resources(FCGo "translations"
         PREFIX "/"
-        BASE "${CMAKE_CURRENT_SOURCE_DIR}"
+        BASE "${QM_OUTPUT_DIR}"
         FILES ${QM_FILES_OUT}
     )
 endif()
