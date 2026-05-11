@@ -27,9 +27,16 @@ endif()
 
 # SDL2
 find_package(SDL2 QUIET)
-if(NOT SDL2_FOUND)
+if(SDL2_FOUND)
+    message(STATUS "SDL2 found (system)")
+else()
     set(SDL2_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/third_party/SDL2/include")
-    set(SDL2_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/third_party/SDL2/lib/x64/SDL2.lib")
+    if(MINGW)
+        set(SDL2_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/third_party/SDL2/lib/x64/SDL2.dll")
+    else()
+        set(SDL2_LIBRARY "${CMAKE_CURRENT_SOURCE_DIR}/third_party/SDL2/lib/x64/SDL2.lib")
+    endif()
+    message(STATUS "SDL2 using bundled: ${SDL2_LIBRARY}")
 endif()
 
 # ============================================================
@@ -227,7 +234,7 @@ source_group("Resources\\Icons" FILES ${RESOURCE_FILES})
 target_include_directories(FCGo PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/src/core
-    ${SDL2_INCLUDE_DIR}
+    $<$<NOT:$<BOOL:${SDL2_FOUND}>>:${SDL2_INCLUDE_DIR}>
 )
 
 target_link_libraries(FCGo PRIVATE
@@ -237,7 +244,8 @@ target_link_libraries(FCGo PRIVATE
     Qt6::OpenGL
     Qt6::OpenGLWidgets
     Qt6::Network
-    ${SDL2_LIBRARY}
+    $<$<NOT:$<BOOL:${SDL2_FOUND}>>:${SDL2_LIBRARY}>
+    $<$<BOOL:${SDL2_FOUND}>:SDL2::SDL2>
 )
 
 # Copy SDL2.dll to output directory
