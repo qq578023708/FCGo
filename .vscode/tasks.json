@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "CMake: Configure",
+            "label": "CMake Configure",
             "type": "shell",
             "command": "cmake",
             "args": [
@@ -15,7 +15,7 @@
             "detail": "Configure CMake project"
         },
         {
-            "label": "CMake: Configure (Release)",
+            "label": "CMake Configure Release",
             "type": "shell",
             "command": "cmake",
             "args": [
@@ -28,7 +28,7 @@
             "detail": "Configure CMake project for Release"
         },
         {
-            "label": "CMake: Build",
+            "label": "CMake Build",
             "type": "shell",
             "command": "cmake",
             "args": [
@@ -42,10 +42,10 @@
             },
             "problemMatcher": ["$msCompile"],
             "detail": "Build the project",
-            "dependsOn": "CMake: Configure"
+            "dependsOn": "CMake Configure"
         },
         {
-            "label": "CMake: Build (Release)",
+            "label": "CMake Build Release",
             "type": "shell",
             "command": "cmake",
             "args": [
@@ -56,10 +56,10 @@
             "group": "build",
             "problemMatcher": ["$msCompile"],
             "detail": "Build the project in Release mode",
-            "dependsOn": "CMake: Configure (Release)"
+            "dependsOn": "CMake Configure Release"
         },
         {
-            "label": "CMake: Clean",
+            "label": "CMake Clean",
             "type": "shell",
             "command": "cmake",
             "args": [
@@ -71,7 +71,7 @@
             "detail": "Clean build artifacts"
         },
         {
-            "label": "CMake: Clean Rebuild",
+            "label": "CMake Clean Rebuild",
             "type": "shell",
             "command": "cmake",
             "args": [

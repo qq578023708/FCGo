@@ -11,7 +11,7 @@
             "cwd": "${workspaceFolder}",
             "environment": [],
             "console": "integratedTerminal",
-            "preLaunchTask": "CMake: Build"
+            "preLaunchTask": "CMake Build"
         },
         {
             "name": "Debug FCGo (with ROM)",
@@ -25,7 +25,7 @@
             "cwd": "${workspaceFolder}",
             "environment": [],
             "console": "integratedTerminal",
-            "preLaunchTask": "CMake: Build"
+            "preLaunchTask": "CMake Build"
         },
         {
             "name": "Debug FCGo (Release)",
@@ -37,7 +37,7 @@
             "cwd": "${workspaceFolder}",
             "environment": [],
             "console": "integratedTerminal",
-            "preLaunchTask": "CMake: Build (Release)"
+            "preLaunchTask": "CMake Build Release"
         },
         {
             "name": "Attach to FCGo",
