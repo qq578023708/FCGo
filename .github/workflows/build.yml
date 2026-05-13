@@ -48,8 +48,10 @@ jobs:
         ldd build/FCGo.exe | grep mingw | awk '{print $3}' | xargs -I{} cp {} artifact/ 2>/dev/null || true
         # Copy steam_appid.txt if exists
         cp steam_appid.txt artifact/ 2>/dev/null || true
-        # Create zip archive
-        cd artifact && zip -r ../FCGo-Windows-x64.zip .
+
+    - name: Create Zip
+      shell: pwsh
+      run: Compress-Archive -Path artifact/* -DestinationPath FCGo-Windows-x64.zip
 
     - name: Create Release
       uses: softprops/action-gh-release@v2
