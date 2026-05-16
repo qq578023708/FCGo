@@ -23,7 +23,10 @@ int main(int argc, char *argv[]) {
     
     if (lang == "zh_CN") {
         QTranslator* translator = new QTranslator(&app);
-        if (translator->load(":/src/qt/translations/fcgo_zh_CN.qm")) {
+        // Try both possible resource paths
+        if (translator->load(":/fcgo_zh_CN.qm") ||
+            translator->load(":/translations/fcgo_zh_CN.qm") ||
+            translator->load(":/src/qt/translations/fcgo_zh_CN.qm")) {
             app.installTranslator(translator);
         }
     }

@@ -191,7 +191,7 @@ void MainWindow::setupMenus() {
     QMenu* settingsMenu = menuBar()->addMenu(tr("&Settings"));
     
     QAction* settingsAct = new QAction(tr("&Settings..."), this);
-    settingsAct->setShortcut(QKeySequence(Qt::Key_F1));
+    settingsAct->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Comma));  // Ctrl+, (standard settings shortcut)
     connect(settingsAct, &QAction::triggered, this, &MainWindow::onSettings);
     settingsMenu->addAction(settingsAct);
 
@@ -558,8 +558,24 @@ void MainWindow::onLanguageChanged(QAction* action) {
     QSettings settings("FCGo", "FCGo");
     settings.setValue("Language", lang);
     
-    QMessageBox::information(this, tr("Language Changed"), 
-        tr("Please restart the application to apply the language change."));
+    // Remove old translator and install new one
+    if (translator_) {
+        qApp->removeTranslator(translator_);
+        delete translator_;
+        translator_ = nullptr;
+    }
+    
+    if (lang == "zh_CN") {
+        translator_ = new QTranslator(this);
+        if (translator_->load(":/fcgo_zh_CN.qm") ||
+            translator_->load(":/translations/fcgo_zh_CN.qm") ||
+            translator_->load(":/src/qt/translations/fcgo_zh_CN.qm")) {
+            qApp->installTranslator(translator_);
+        }
+    }
+    
+    // Retranslate UI
+    retranslateUi();
 }
 
 void MainWindow::onAbout() {
@@ -850,6 +866,19 @@ void MainWindow::loadSettings() {
             }
         }
     }
+}
+
+void MainWindow::changeEvent(QEvent* event) {
+    if (event->type() == QEvent::LanguageChange) {
+        retranslateUi();
+    }
+    QMainWindow::changeEvent(event);
+}
+
+void MainWindow::retranslateUi() {
+    setWindowTitle(tr("FCGo - NES Emulator"));
+    updateTitle();
+    // Toolbar and status bar labels will be updated via tr() on next repaint
 }
 
 void MainWindow::closeEvent(QCloseEvent* event) {

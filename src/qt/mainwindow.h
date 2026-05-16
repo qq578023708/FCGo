@@ -4,6 +4,7 @@
 #include <QTimer>
 #include <QLabel>
 #include <QSet>
+#include <QTranslator>
 #include <memory>
 
 #include "../core/nes_console.h"
@@ -31,6 +32,7 @@ public:
     void keyPressEvent(QKeyEvent* event) override;
     void keyReleaseEvent(QKeyEvent* event) override;
     bool eventFilter(QObject* obj, QEvent* event) override;
+    void changeEvent(QEvent* event) override;
 
 private slots:
     // File menu
@@ -75,6 +77,7 @@ private:
     void setupToolbar();
     void setupStatusBar();
     void setupLanguageMenu();
+    void retranslateUi();
     void updateTitle();
     void saveSettings();
     void loadSettings();
@@ -107,6 +110,7 @@ private:
 
     // Language menu
     QMenu* languageMenu_ = nullptr;
+    QTranslator* translator_ = nullptr;
 
     // State
     QString romPath_;
