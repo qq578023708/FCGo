@@ -115,13 +115,13 @@ void MainWindow::setupMenus() {
     
     for (int i = 1; i <= 9; i++) {
         QAction* saveAct = new QAction(tr("Slot %1").arg(i), this);
-        saveAct->setShortcut(QKeySequence(Qt::Key_F1 + i - 1));
+        saveAct->setShortcut(QKeySequence(Qt::CTRL | (Qt::Key_1 + i - 1)));  // Ctrl+1-9 for save
         saveAct->setData(i);
         connect(saveAct, &QAction::triggered, [this, i]() { saveSlot_ = i; onSaveState(); });
         saveStateMenu->addAction(saveAct);
 
         QAction* loadAct = new QAction(tr("Slot %1").arg(i), this);
-        loadAct->setShortcut(QKeySequence(Qt::SHIFT | Qt::Key_F1 + i - 1));
+        loadAct->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | (Qt::Key_1 + i - 1)));  // Ctrl+Shift+1-9 for load
         loadAct->setData(i);
         connect(loadAct, &QAction::triggered, [this, i]() { saveSlot_ = i; onLoadState(); });
         loadStateMenu->addAction(loadAct);
