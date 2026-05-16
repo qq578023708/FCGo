@@ -45,14 +45,27 @@ void InputManagerQt::update(NESConsole& console, QWidget* widget) {
     // Apply to console
     console.setController(0, p1);
     console.setController(1, p2);
+
+    // Apply VS System coin input
+    console.setCoinInput(coinPressed_);
 }
 
 void InputManagerQt::handleKeyPress(QKeyEvent* event) {
     keyStates_[event->key()] = true;
+    
+    // Handle VS System coin button
+    if (event->key() == coinKey_) {
+        coinPressed_ = true;
+    }
 }
 
 void InputManagerQt::handleKeyRelease(QKeyEvent* event) {
     keyStates_[event->key()] = false;
+    
+    // Handle VS System coin button
+    if (event->key() == coinKey_) {
+        coinPressed_ = false;
+    }
 }
 
 uint8_t InputManagerQt::getControllerState(int player) const {

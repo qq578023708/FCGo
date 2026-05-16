@@ -17,6 +17,11 @@ enum class NESButton : uint8_t {
     Right  = 0x01
 };
 
+// VS System coin button (separate from controller)
+enum class VSSystemButton : uint8_t {
+    Coin = 0x01  // VS 系统投币键
+};
+
 // Key binding configuration
 struct KeyBinding {
     int primaryKey = 0;      // Qt key code
@@ -31,6 +36,11 @@ public:
     void update(NESConsole& console, QWidget* widget);
     void handleKeyPress(QKeyEvent* event);
     void handleKeyRelease(QKeyEvent* event);
+
+    // VS System coin button (default: F1)
+    void setCoinKey(int key) { coinKey_ = key; }
+    int coinKey() const { return coinKey_; }
+    bool isCoinPressed() const { return coinPressed_; }
 
     // Key binding configuration
     void setKeyBinding(int player, NESButton button, int key);
@@ -56,4 +66,8 @@ private:
     int turboCounter_ = 0;
     int turboRate_ = 10;
     bool turboState_ = false;
+
+    // VS System coin button state
+    int coinKey_ = Qt::Key_F1;  // Default coin key: F1
+    bool coinPressed_ = false;
 };

@@ -64,6 +64,13 @@ public:
         bus_.controllerState[player&1] &= ~(u8)b;
     }
 
+    // VS System coin input (for arcade games like VS Battle City)
+    void setCoinInput(bool pressed) { 
+        coinPressed_ = pressed; 
+        bus_.vsCoinPressed = pressed;
+    }
+    bool isCoinPressed() const { return coinPressed_; }
+
     // Mapper IRQ trigger hook (external use)
     void setIRQCallback(std::function<void()> cb) { mapper_->setIRQCallback(std::move(cb)); }
 
@@ -99,6 +106,9 @@ private:
     std::unique_ptr<Mapper> mapper_;
     bool romLoaded_{false};
     std::string romPath_;
+
+    // VS System coin input state
+    bool coinPressed_{false};
 
     // PPU cycle budget (3 PPU ticks per CPU tick)
     void tickCPU();

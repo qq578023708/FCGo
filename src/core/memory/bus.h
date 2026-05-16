@@ -21,6 +21,9 @@ public:
     u8 controllerShift[2]{0, 0};   // Shift register for serial reads
     bool controllerStrobe{false};
 
+    // VS System coin input (for arcade games like VS Battle City)
+    bool vsCoinPressed{false};
+
     // Components (owned by NESConsole, referenced here)
     PPU*     ppu{nullptr};
     APU*     apu{nullptr};
@@ -32,9 +35,15 @@ public:
         if (addr < 0x4000) return ppu ? ppu->regRead(addr) : 0;
         if (addr == 0x4015) return apu ? apu->regRead(addr) : 0;
         if (addr == 0x4016) {
-            if (controllerStrobe) return 0x40 | ((controllerState[0] >> 7) & 1);
-            u8 v = 0x40 | ((controllerShift[0] >> 7) & 1);
-            controllerShift[0] <<= 1;
+            u8 v;
+            if (controllerStrobe) {
+                v = 0x40 | ((controllerState[0] >> 7) & 1);
+            } else {
+                v = 0x40 | ((controllerShift[0] >> 7) & 1);
+                controllerShift[0] <<= 1;
+            }
+            // VS System: coin input on bit 4 (0x10) when reading $4016
+            if (vsCoinPressed) v |= 0x10;
             return v;
         }
         if (addr == 0x4017) {
