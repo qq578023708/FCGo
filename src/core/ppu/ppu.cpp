@@ -355,8 +355,8 @@ void PPU::tick(int ppuCycles) {
                 // Idle
             } else if (dot <= 256) {
                 if (rendering) {
-                    shiftBGRegisters();
                     fetchBackground();
+                    shiftBGRegisters();
                     if (dot == 256) incrementVY();
                 }
                 renderPixel();
