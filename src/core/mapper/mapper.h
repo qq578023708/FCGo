@@ -23,6 +23,9 @@ struct NESRom {
     int  prgBanks{0};         // number of 16KB PRG banks
     int  chrBanks{0};         // number of 8KB CHR banks
 
+    // Raw iNES header (16 bytes) for extended flags
+    u8 header[16]{};
+
     // Load from file; returns true on success
     static bool load(const std::string& path, NESRom& rom);
 

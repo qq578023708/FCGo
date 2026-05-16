@@ -17,6 +17,20 @@ const u32 PPU::kNESPalette[64] = {
 };
 
 // ============================================================
+// VS System RP2C04-0001 Palette (ARGB8888)
+// ============================================================
+const u32 PPU::kVSPalette[64] = {
+    0xFF757575,0xFF271B8F,0xFF0000AB,0xFF47009F,0xFF8F0077,0xFFAB0013,0xFFA70000,0xFF7F0B00,
+    0xFF432F00,0xFF004700,0xFF005100,0xFF003F17,0xFF1B3F5F,0xFF000000,0xFF000000,0xFF000000,
+    0xFFBFBFBF,0xFF0073EF,0xFF233BEF,0xFF8300F3,0xFFBF00BF,0xFFE7005B,0xFFE7001B,0xFFB73B07,
+    0xFF875300,0xFF478F07,0xFF009F47,0xFF009B77,0xFF0083B7,0xFF000000,0xFF000000,0xFF000000,
+    0xFFFFFFFF,0xFF3FBFFF,0xFF5F9FFF,0xFFA78FFF,0xFFF79FFF,0xFFF77BAB,0xFFF79363,0xFFE7BF47,
+    0xFFD7A78B,0xFF9FCF57,0xFF83DF8F,0xFF5FCF9F,0xFF4FBFCF,0xFF575757,0xFF000000,0xFF000000,
+    0xFFFFFFFF,0xFF9FD7FF,0xFFB7C7FF,0xFFD7BFFF,0xFFFFBFF7,0xFFFFBFC7,0xFFFFC7A7,0xFFFFCF87,
+    0xFFE7DFA7,0xFFC7E7B7,0xFFB7F3C7,0xFFA7FBD7,0xFF9FF7F7,0xFF9F9F9F,0xFF000000,0xFF000000
+};
+
+// ============================================================
 // PPUCTRL bits
 #define CTRL_NMI        0x80
 #define CTRL_MASTER     0x40
@@ -82,6 +96,7 @@ void PPU::ppuWrite(u16 addr, u8 val) {
 }
 
 u32 PPU::getPaletteColor(u8 idx) const {
+    if (isVSMode) return kVSPalette[idx & 0x3F];
     return kNESPalette[idx & 0x3F];
 }
 
@@ -355,8 +370,8 @@ void PPU::tick(int ppuCycles) {
                 // Idle
             } else if (dot <= 256) {
                 if (rendering) {
-                    fetchBackground();
                     shiftBGRegisters();
+                    fetchBackground();
                     if (dot == 256) incrementVY();
                 }
                 renderPixel();

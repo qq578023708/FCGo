@@ -39,6 +39,9 @@ bool NESConsole::loadROM(const std::string& path) {
     romLoaded_ = true;
     romPath_   = path;
 
+    // Detect VS System mode (bit 0 of flag7 indicates VS System)
+    ppu_.isVSMode = (rom_.header[7] & 0x01) != 0;
+
     // Wire mapper to buses
     bus_.mapper    = mapper_.get();
     ppuBus_.mapper = mapper_.get();

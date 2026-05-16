@@ -68,6 +68,9 @@ bool NESRom::load(const std::string& path, NESRom& rom) {
     // Validate NES magic
     if (p[0]!='N'||p[1]!='E'||p[2]!='S'||p[3]!=0x1A) return false;
 
+    // Save raw header
+    memcpy(rom.header, p, 16);
+
     rom.prgBanks = p[4];
     rom.chrBanks = p[5];
 

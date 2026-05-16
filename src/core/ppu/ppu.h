@@ -47,6 +47,9 @@ public:
     // Current scanline / dot (for mapper IRQs)
     int scanline{0}, dot{0};
 
+    // VS System mode (uses different palette)
+    bool isVSMode{false};
+
     // Expose for mapper scanline IRQ
     bool renderingEnabled() const;
 
@@ -117,4 +120,5 @@ private:
     u8 fetchBGHi() const;
 
     static const u32 kNESPalette[64];
+    static const u32 kVSPalette[64];
 };
