@@ -42,8 +42,9 @@ public:
                 v = 0x40 | ((controllerShift[0] >> 7) & 1);
                 controllerShift[0] <<= 1;
             }
-            // VS System: coin input on bit 4 (0x10) when reading $4016
-            if (vsCoinPressed) v |= 0x10;
+            // VS System: coin input on bit 2 (0x04) and bit 4 (0x10) when reading $4016
+            // Different VS games use different bits
+            if (vsCoinPressed) v |= 0x04 | 0x10;
             return v;
         }
         if (addr == 0x4017) {
